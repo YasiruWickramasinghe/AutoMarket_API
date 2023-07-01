@@ -12,7 +12,7 @@ router.post(
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
     body('email').trim().isEmail().withMessage('Invalid email address'),
-    body('phone').trim().notEmpty().withMessage('Phone is required'),
+    body('phone').trim().notEmpty().withMessage('Invalid phone number'),
     body('password').trim().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
   ],
   registerUser

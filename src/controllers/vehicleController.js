@@ -88,30 +88,62 @@ const createVehicle = async (req, res) => {
 const updateVehicle = async (req, res) => {
   const { id } = req.params;
   const { manufacturer, model, year, price, desc } = req.body;
+
   try {
-    const updatedVehicle = await Vehicle.findByIdAndUpdate(id, { manufacturer, model, year, price, desc }, { new: true });
-    if (!updatedVehicle) {
+    const vehicle = await Vehicle.findById(id);
+
+    if (!vehicle) {
       return res.status(404).json({ error: 'Vehicle not found' });
     }
-    res.status(201).json({ message: 'Vehicle updated successfully' });
+
+    // Check if the logged-in user is the owner of the vehicle or an admin
+    if (vehicle.userId.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    }
+
+    // Update the vehicle details
+    vehicle.manufacturer = manufacturer;
+    vehicle.model = model;
+    vehicle.year = year;
+    vehicle.price = price;
+    vehicle.desc = desc;
+
+    const updatedVehicle = await vehicle.save();
+    res.status(200).json({ message: 'Vehicle updated successfully', data: updatedVehicle });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // Delete vehicle by ID
 const deleteVehicle = async (req, res) => {
   const { id } = req.params;
   try {
+    const vehicle = await Vehicle.findById(id);
+
+    if (!vehicle) {
+      return res.status(404).json({ error: 'Vehicle not found' });
+    }
+
+    // Check if the logged-in user is the owner of the vehicle or an admin
+    if (vehicle.userId.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    }
+
     const deletedVehicle = await Vehicle.findByIdAndDelete(id);
+
     if (!deletedVehicle) {
       return res.status(404).json({ error: 'Vehicle not found' });
     }
+
     res.json({ message: 'Vehicle deleted successfully' });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 // Search vehicles by name and author
 const searchVehicles = async (req, res) => {
