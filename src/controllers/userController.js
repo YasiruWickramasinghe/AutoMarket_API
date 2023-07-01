@@ -12,7 +12,7 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    const { name, email, phone, password } = req.body;
 
     // Check if the email is already registered
     const existingUser = await User.findOne({ email });
@@ -28,13 +28,14 @@ const registerUser = async (req, res) => {
     const user = new User({
       name,
       email,
+      phone,
       password: hashedPassword,
       password,
     });
 
     await user.save();
 
-    res.status(201).json({ message: 'User registered successfully', data: user });
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -80,7 +81,7 @@ const loginUser = async (req, res) => {
 // Update user profile and password
 const updateUserProfileAndPassword = async (req, res) => {
   try {
-    const { name, email, oldPassword, newPassword } = req.body;
+    const { name, email, phone, oldPassword, newPassword } = req.body;
     const user = await User.findById(req.user._id);
 
     if (!user) {
@@ -99,6 +100,7 @@ const updateUserProfileAndPassword = async (req, res) => {
     // Update the profile details
     user.name = name || user.name;
     user.email = email || user.email;
+    user.phone = phone || user.phone;
 
     await user.save();
 

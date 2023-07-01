@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const vehicleSchema = new mongoose.Schema({
   manufacturer: {
@@ -17,20 +18,15 @@ const vehicleSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  contact: {
-    name: {
-      type: String,
-      required: true
-    },
-    email: {
-      type: String,
-      required: true
-    },
-    phone: {
-      type: String,
-      required: true
-    }
-  }
+  desc: {
+    type: String,
+    required: true
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   // ... add other fields as needed
 }, { timestamps: true });
 

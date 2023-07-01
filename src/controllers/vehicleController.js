@@ -58,21 +58,38 @@ const getVehicleById = async (req, res) => {
 
 // Create a new vehicle
 const createVehicle = async (req, res) => {
-  const { manufacturer, model, year, price, contact  } = req.body;
-  try {
-    const newVehicle = await Vehicle.create({ manufacturer, model, year, price, contact });
-    res.status(201).json({ message: 'Vehicle created successfully'});
+  try{
+    // Retrieve the user ID from the request object 
+    const userId = req.user.id;
+
+    // Retrieve the vehicle details from the request body
+    const { manufacturer, model, year, price, desc } = req.body;
+
+    const vehicle = new Vehicle({
+      manufacturer, 
+      model, 
+      year, 
+      price, 
+      desc,
+      userId
+    });
+
+    await vehicle.save();
+
+    res.status(201).json({ message: 'Vehicle created successfully' });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
+
 };
 
 // Update vehicle by ID
 const updateVehicle = async (req, res) => {
   const { id } = req.params;
-  const { manufacturer, model, year, price, contact } = req.body;
+  const { manufacturer, model, year, price, desc } = req.body;
   try {
-    const updatedVehicle = await Vehicle.findByIdAndUpdate(id, { manufacturer, model, year, price, contact }, { new: true });
+    const updatedVehicle = await Vehicle.findByIdAndUpdate(id, { manufacturer, model, year, price, desc }, { new: true });
     if (!updatedVehicle) {
       return res.status(404).json({ error: 'Vehicle not found' });
     }

@@ -8,14 +8,16 @@ const {
   deleteVehicle,
   searchVehicles,
 } = require('../controllers/vehicleController');
+const authenticateUser = require('../middleware/authMiddleware');
+const authorize = require('../middleware/authorizeMiddleware');
 
 const router = express.Router();
 
 // Get all vehicles with pagination, search, sorting, and filtering
-router.get('/', getVehicles);
+router.get('/', authenticateUser, getVehicles);
 
 // Get vehicle by ID
-router.get('/:id', getVehicleById);
+router.get('/:id', authenticateUser, getVehicleById);
 
 // Create a new vehicle
 router.post(
@@ -25,9 +27,6 @@ router.post(
     body('model').notEmpty().withMessage('Model is required'),
     body('year').notEmpty().withMessage('Year is required'),
     body('price').notEmpty().withMessage('Price is required'),
-    body('contact.name').notEmpty().withMessage('Contact name is required'),
-    body('contact.email').notEmpty().withMessage('Contact email is required').isEmail().withMessage('Invalid email format'),
-    body('contact.phone').notEmpty().withMessage('Contact phone is required'),
     // ... add other validation rules as needed
   ],
   (req, res, next) => {
@@ -37,6 +36,7 @@ router.post(
     }
     next();
   },
+  authenticateUser,
   createVehicle
 );
 
@@ -48,9 +48,6 @@ router.put(
     body('model').notEmpty().withMessage('Model is required'),
     body('year').notEmpty().withMessage('Year is required'),
     body('price').notEmpty().withMessage('Price is required'),
-    body('contact.name').notEmpty().withMessage('Contact name is required'),
-    body('contact.email').notEmpty().withMessage('Contact email is required').isEmail().withMessage('Invalid email format'),
-    body('contact.phone').notEmpty().withMessage('Contact phone is required'),
     // ... add other validation rules as needed
   ],
   (req, res, next) => {
@@ -60,13 +57,14 @@ router.put(
     }
     next();
   },
+  authenticateUser,
   updateVehicle
 );
 
 // Delete vehicle by ID
-router.delete('/:id', deleteVehicle);
+router.delete('/:id', authenticateUser, deleteVehicle);
 
 // Search vehicles by name
-router.get('/search/name', searchVehicles);
+router.get('/search/name', authenticateUser, searchVehicles);
 
 module.exports = router;
