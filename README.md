@@ -11,7 +11,7 @@ The base URL for all API endpoints is: `http://localhost:3000`.
 
 ### Endpoints
 
-#### User Authentication
+## User Authentication
 
 - **POST /register**
   - Description: Register a new user.
@@ -78,7 +78,7 @@ The base URL for all API endpoints is: `http://localhost:3000`.
   - Headers:
     - Authorization: Bearer access_token
 
-#### Vehicle CRUD   
+## Vehicle CRUD   
 
 
 ## Environment Variables

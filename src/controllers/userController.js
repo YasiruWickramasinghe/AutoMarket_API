@@ -4,7 +4,7 @@ const { validationResult } = require('express-validator');
 const User = require('../models/userModel');
 
 // User registration
-exports.registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
     const errors = validationResult(req);
 
@@ -34,7 +34,7 @@ exports.registerUser = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: 'User registered successfully', data: user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -42,7 +42,7 @@ exports.registerUser = async (req, res) => {
 };
 
 // User login
-exports.loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const errors = validationResult(req);
 
@@ -78,7 +78,7 @@ exports.loginUser = async (req, res) => {
 };
 
 // Update user profile and password
-exports.updateUserProfileAndPassword = async (req, res) => {
+const updateUserProfileAndPassword = async (req, res) => {
   try {
     const { name, email, oldPassword, newPassword } = req.body;
     const user = await User.findById(req.user._id);
@@ -111,7 +111,7 @@ exports.updateUserProfileAndPassword = async (req, res) => {
 
 
 // Delete user profile
-exports.deleteUserProfile = async (req, res) => {
+const deleteUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
 
@@ -129,7 +129,7 @@ exports.deleteUserProfile = async (req, res) => {
 };
 
 // Logout user
-exports.logoutUser = async (req, res) => {
+const logoutUser = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
 
@@ -159,3 +159,5 @@ function generateAccessToken(userId) {
 function generateRefreshToken(userId) {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRY });
 }
+
+module.exports = { registerUser, loginUser, updateUserProfileAndPassword, deleteUserProfile, logoutUser };
