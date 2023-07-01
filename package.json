@@ -1,0 +1,30 @@
+{
+  "name": "automarket_api",
+  "version": "1.0.0",
+  "description": "AutoMarket is an online platform for buying and selling vehicles. It connects buyers and sellers, providing a convenient and secure way to browse, list, and purchase vehicles of various types. with all user authentiocation and authorization.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YasiruWickramasinghe/AutoMarket_API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YasiruWickramasinghe/AutoMarket_API/issues"
+  },
+  "homepage": "https://github.com/YasiruWickramasinghe/AutoMarket_API#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.3.1",
+    "nodemon": "^2.0.22"
+  }
+}
