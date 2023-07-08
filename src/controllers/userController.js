@@ -108,6 +108,14 @@ const updateUserProfileAndPassword = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    if (email !== user.email) {
+      // Email has been changed, so check if it's already registered
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ error: 'Email already registered' });
+      }
+    }
+
     // If provided, verify and update the password
     if (oldPassword && newPassword) {
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
