@@ -21,15 +21,11 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ error: 'Email already registered' });
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     // Create a new user
     const user = new User({
       name,
       email,
       phone,
-      password: hashedPassword,
       password,
     });
 
@@ -78,9 +74,33 @@ const loginUser = async (req, res) => {
   }
 };
 
+//Get user profile details
+const getUserProfile = async (req, res) => {
+  try {
+    // Fetch the user details from the authenticated request object (req.user)
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Return the user profile details
+    res.json({ user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Update user profile and password
 const updateUserProfileAndPassword = async (req, res) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { name, email, phone, oldPassword, newPassword } = req.body;
     const user = await User.findById(req.user._id);
 
@@ -162,4 +182,4 @@ function generateRefreshToken(userId) {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRY });
 }
 
-module.exports = { registerUser, loginUser, updateUserProfileAndPassword, deleteUserProfile, logoutUser };
+module.exports = { registerUser, loginUser, getUserProfile, updateUserProfileAndPassword, deleteUserProfile, logoutUser };

@@ -43,6 +43,12 @@ This API module allows you to manage User, including Login, Logout, Signup, upda
     }
     ```
 
+- **GET /profile**
+  - Description: Get user profile details.
+  - Example: `GET /profile`
+  - Headers:
+    - Authorization: Bearer access_token
+
 - **PUT /profile**
   - Description: Update user profile and password.
   - Request Body:
@@ -50,7 +56,7 @@ This API module allows you to manage User, including Login, Logout, Signup, upda
     - email: Email address of the user (required).
     - oldPassword: Old password for authentication (required).
     - newPassword: New password for the user (required, minimum 6 characters).
-  - Example: `PUT /profile`
+  - Example: `PUT /profileupdate`
     ```json
     {
       "name": "Harry Doe",
@@ -64,7 +70,7 @@ This API module allows you to manage User, including Login, Logout, Signup, upda
 
 - **DELETE /profile**
   - Description: Delete user profile.
-  - Example: `DELETE /profile`
+  - Example: `DELETE /profiledelete`
   - Headers:
     - Authorization: Bearer access_token
 

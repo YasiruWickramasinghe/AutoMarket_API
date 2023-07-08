@@ -1,6 +1,6 @@
 const express = require('express');
 const { body } = require('express-validator');
-const { registerUser, loginUser, updateUserProfileAndPassword, deleteUserProfile, logoutUser  } = require('../controllers/userController');
+const { registerUser, loginUser, getUserProfile, updateUserProfileAndPassword, deleteUserProfile, logoutUser  } = require('../controllers/userController');
 const authenticateUser = require('../middleware/authMiddleware');
 const authorize = require('../middleware/authorizeMiddleware');
 
@@ -28,20 +28,23 @@ router.post(
   loginUser
 );
 
+//get user
+router.get('/profile', authenticateUser, getUserProfile);
+
+//update user
 router.put(
-  '/profile',
+  '/profileupdate',
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
     body('email').trim().isEmail().withMessage('Invalid email address'),
     body('phone').trim().notEmpty().withMessage('Phone is required'),
-    body('password').trim().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
   ],
   authenticateUser,
   updateUserProfileAndPassword
 );
 
 // Delete user profile
-router.delete('/profile', authenticateUser, deleteUserProfile);
+router.delete('/profiledelete', authenticateUser, deleteUserProfile);
 
 // Logout user
 router.post('/logout', authenticateUser, logoutUser);
