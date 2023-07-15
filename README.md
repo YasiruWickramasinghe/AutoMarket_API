@@ -112,6 +112,14 @@ This API module allows you to manage vehicles, including retrieving, creating, u
   - Example:
     - `GET /vehicles/:id`
 
+- **GET /vehicles/user/:userid**
+
+  - Description: Retrieve a specific vehicle by User ID.
+  - Parameters:
+    - userid: User ID for the vehicle.
+  - Example:
+    - `GET /vehicles/user/:userid`
+
 - **POST /vehicles**
 
   - Description: Create a new vehicle.
