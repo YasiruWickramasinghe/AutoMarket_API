@@ -7,6 +7,7 @@ const {
   updateVehicle,
   deleteVehicle,
   searchVehicles,
+  getVehicleByUserId,
 } = require('../controllers/vehicleController');
 const authenticateUser = require('../middleware/authMiddleware');
 const authorize = require('../middleware/authorizeMiddleware');
@@ -18,6 +19,9 @@ router.get('/', authenticateUser, getVehicles);
 
 // Get vehicle by ID
 router.get('/:id', authenticateUser, getVehicleById);
+
+// Get vehicle by User ID
+router.get('/user/:userId', authenticateUser, getVehicleByUserId);
 
 // Create a new vehicle
 router.post(

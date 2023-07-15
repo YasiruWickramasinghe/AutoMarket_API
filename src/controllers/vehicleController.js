@@ -56,6 +56,24 @@ const getVehicleById = async (req, res) => {
   }
 };
 
+// Get vehicle by User ID
+const getVehicleByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const vehicle = await Vehicle.find({ userId: userId });
+
+    if (!vehicle) {
+      return res.status(404).json({ error: 'Vehicle not found' });
+    }
+
+    res.json(vehicle);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 // Create a new vehicle
 const createVehicle = async (req, res) => {
   try{
@@ -162,4 +180,4 @@ const searchVehicles = async (req, res) => {
   }
 };
 
-module.exports = { getVehicles, getVehicleById, createVehicle, updateVehicle, deleteVehicle, searchVehicles };
+module.exports = { getVehicles, getVehicleById, createVehicle, updateVehicle, deleteVehicle, searchVehicles, getVehicleByUserId };
